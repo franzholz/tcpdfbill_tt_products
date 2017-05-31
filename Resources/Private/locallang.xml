@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_wpttproductsrate_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="label_address_line1">Company,</label>
+			<label index="label_address_line2">Street, City</label>
+
+			<label index="label_title">company name – person – street, city</label>
+			<label index="label_name">Name:</label>
+			<label index="label_add">Address:</label>
+			<label index="label_table_title">Rechnung</label>
+			<label index="label_order_date">Datum</label>
+			<label index="label_order_id">Bestell-Nr.</label>
+			<label index="label_order_bill">Rechnungs-Nr.</label>
+			<label index="label_order_qty">Anzahl</label>
+			<label index="label_order_name">Artikel</label>
+			<label index="label_order_amt">Preis</label>
+			<label index="label_order_index">(Brutto)</label>
+			<label index="label_order_gamt">Gesamt</label>
+			<label index="label_order_tax">enth. Mwst</label>
+			<label index="label_paymentaccount">Unsere Kontoverbindung</label>
+			<label index="label_thanks">Many thanks for your order.</label>
+			<label index="label_sender">Your Shop-Team</label>
+			<label index="label_text1">Company</label>
+			<label index="label_text2">Name Street Town</label>
+			<label index="label_text3">USt.-ID:DE00000</label>
+			<label index="label_text4">Telefon:  +49-(0)12345</label>
+			<label index="label_text5">Telefax:  +49-(0)123456</label>
+			<label index="label_text6">Mobil:  +49-(0)0111</label>
+			<label index="label_text7">E-Mail: my@email.com</label>
+			<label index="label_text8">Internet: www.mydomain.de</label>
+			<label index="label_bottom">Bitte beachten Sie auch unsere AGBs unter:</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+
+			<label index="ll_fix_address_line1">Firma,</label>
+			<label index="ll_fix_address_line2">Straße, Stadt</label>
+
+			<label index="label_title">company name – person – street, city</label>
+			<label index="label_name">Name:</label>
+			<label index="label_add">Address:</label>
+			<label index="label_table_title">Rechnung</label>
+			<label index="label_order_date">Datum</label>
+			<label index="label_order_id">Bestell-Nr.</label>
+			<label index="label_order_bill">Rechnungs-Nr.</label>
+			<label index="label_order_qty">Menge</label>
+			<label index="label_order_name">Artikel</label>
+			<label index="label_order_amt">Preis</label>
+			<label index="label_order_index">(Brutto)</label>
+			<label index="label_order_gamt">Gesamt</label>
+			<label index="label_order_taxorder">MwSt</label>
+			<label index="label_order_tax">+ MwSt</label>
+			<label index="label_paymentaccount">Unsere Kontoverbindung</label>
+			<label index="label_thanks">Vielen Dank für Ihre Bestellung</label>
+			<label index="label_sender">Ihr Shop Team</label>
+			<label index="label_text1">Company</label>
+			<label index="label_text2">Name Straße Stadt</label>
+			<label index="label_text3">USt.-ID:DE00000</label>
+			<label index="label_text4">Telefon:  +49-(0)12345</label>
+			<label index="label_text5">Telefax:  +49-(0)123456</label>
+			<label index="label_text6">Mobil:  +49-(0)0111</label>
+			<label index="label_text7">E-Mail: my@email.com</label>
+			<label index="label_text8">Internet: www.mydomain.de</label>
+
+			<label index="label_bemerkung">Bemerkung</label>
+			<label index="label_payment_option">Bezahlung</label>
+			<label index="label_bottom">Bitte beachten Sie auch unsere AGBs unter</label>
+		</languageKey>
+	</data>
+</T3locallang>
