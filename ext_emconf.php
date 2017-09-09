@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '0.0.3',
+	'version' => '0.0.4',
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.3.0-7.99.99',
@@ -39,11 +39,5 @@ $EM_CONF[$_EXTKEY] = array(
 		),
 		'suggests' => array(
 		),
-	),
-	'suggests' => array(
-	),
-	'autoload' =>
-	array(
-		'psr-4' => array('JambageCom\\TcpdfbillTtProducts\\' => 'Classes')
 	),
 );
