@@ -1,5 +1,8 @@
 <?php
 
+/***************************************************************
+ * Extension Manager/Repository config file for ext "tcpdfbill_tt_products".
+ ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'TCPDF bill for tt_products',
@@ -32,3 +35,4 @@ $EM_CONF[$_EXTKEY] = array(
 		),
 	),
 );
+
