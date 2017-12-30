@@ -1,3 +1,8 @@
+2017-12-31 Franz Holzinger <franz@ttproducts.de>
+
+    * bugfix for tt_products 3.0.0: consider new parameters for $basketView->getView
+    * use GeneralUtility::makeInstance instead of GeneralUtility::getUserObj
+
 2017-05-31 Franz Holzinger <franz@ttproducts.de>
 
-	* initial code
+    * initial code

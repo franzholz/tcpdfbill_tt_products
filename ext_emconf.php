@@ -1,14 +1,5 @@
 <?php
 
-########################################################################
-# Extension Manager/Repository config file for ext: "user_ttproducts_test"
-#
-# Auto generated 14-07-2009 11:35
-#
-# Manual updates:
-# Only the data in the array - anything else is removed by next write.
-# "version" and "dependencies" must not be touched!
-########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'TCPDF bill for tt_products',

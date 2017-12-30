@@ -46,7 +46,6 @@ class Bill {
         array $generationConf,
         &$result
     ) {
-
         $orderUid = 0;
         $result = false;
 
@@ -59,9 +58,9 @@ class Bill {
         if($orderUid) {
 
             $errorCode = array();
-            $basket1 = GeneralUtility::getUserObj('tx_ttproducts_basket');
-            $basketView = GeneralUtility::getUserObj('tx_ttproducts_basket_view');
-            $infoViewObj = GeneralUtility::getUserObj('tx_ttproducts_info_view');
+            $basket1 = GeneralUtility::makeInstance('tx_ttproducts_basket');
+            $basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
+            $infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
             $subpartMarker = 'TCPDF_BILL_PDF_TEMPLATE';
             $conf = array();
             if (isset($generationConf['conf.'])) {
@@ -217,7 +216,7 @@ class Bill {
                         );
                 } else if (
                     version_compare($ttProductsVersion, '2.12.0', '>=') &&
-                    version_compare($ttProductsVersion, '3.1.0', '<')
+                    version_compare($ttProductsVersion, '3.0.0', '<')
                 ) {
                     $multiOrderArray = array();
                     $multiOrderArray['0'] = $orderArray;
@@ -236,6 +235,36 @@ class Bill {
                             $markerArray,
                             '',
                             $itemArray,
+                            false,
+                            $multiOrderArray,
+                            array(),
+                            $basketExtra,
+                            $basketRecs
+                        );
+                } else if (
+                    version_compare($ttProductsVersion, '3.0.0', '>=') &&
+                    version_compare($ttProductsVersion, '3.1.0', '<')
+                ) {
+                    $multiOrderArray = array();
+                    $multiOrderArray['0'] = $orderArray;
+
+                    $billHtml =
+                        $basketView->getView(
+                            $errorCode,
+                            $templateCode,
+                            'EMAIL',
+                            $infoViewObj,
+                            false,
+                            false,
+                            $calculatedArray,
+                            true,
+                            $subpartMarker,
+                            $markerArray,
+                            array(),
+                            array(),
+                            '',
+                            $itemArray,
+                            false,
                             $multiOrderArray,
                             array(),
                             $basketExtra,
