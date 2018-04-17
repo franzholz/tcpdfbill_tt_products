@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Bill {
 
     public $LOCAL_LANG = array();		// Local Language content
+    public $extensionKey = 'tcpdfbill_tt_products';
 
     public function generateBill (
         $pObj,
@@ -281,7 +282,13 @@ class Bill {
                         $subpartArray
                     );
             } else {
-                $billHtml = tx_div2007_error::getMessage($langObj, $errorCode);
+                $billHtml = '';
+                $message = \tx_div2007_error::getMessage($langObj, $errorCode);
+                GeneralUtility::sysLog(
+                    $message,
+                    $this->extensionKey,
+                    GeneralUtility::SYSLOG_SEVERITY_ERROR
+                );
             }
 
             if ($billHtml == '') {
