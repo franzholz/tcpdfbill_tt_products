@@ -242,7 +242,7 @@ class Bill {
                         );
                 } else if (
                     version_compare($ttProductsVersion, '3.0.0', '>=') &&
-                    version_compare($ttProductsVersion, '3.1.0', '<')
+                    version_compare($ttProductsVersion, '3.2.0', '<')
                 ) {
                     $multiOrderArray = array();
                     $multiOrderArray['0'] = $orderArray;
