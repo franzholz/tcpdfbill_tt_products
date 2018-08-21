@@ -2,6 +2,7 @@
 
     * bugfix: PHP syntax error
     * rename README.txt -> README.md
+    * PHP 7.2: use the fork at https://github.com/semaex/TCPDF
 
 2018-04-17 Franz Holzinger <franz@ttproducts.de>
 
