@@ -112,10 +112,8 @@ class Bill {
                 $billMarkerArray['###ORDER_BILL_NO###']  = $orderUid;
             }
 
-            $contentItem = "";
-
             $configurations_link['parameter'] = $basket1->conf['PIDagb'];
-            $configurations_link['returnLast'] = url;
+            $configurations_link['returnLast'] = $url;
             $url  = $cObj->typolink(null, $configurations_link);
             $billMarkerArray['###AGB_LINK###'] = $this->fullURL . $url;
 
