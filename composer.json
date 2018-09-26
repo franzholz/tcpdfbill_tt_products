@@ -19,5 +19,10 @@
     "replace": {
         "tcpdfbill_tt_products": "self.version",
         "typo3-ter/tcpdfbill-tt-products": "self.version"
+    },
+    "extra": {
+        "typo3/cms": {
+        "extension-key": "tcpdfbill_tt_products"
+        }
     }
 }
