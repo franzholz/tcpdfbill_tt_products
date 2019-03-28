@@ -301,7 +301,12 @@ class Bill {
             }
 
             $pdfFile = $path . 'Order-' . $orderUid . '.pdf';
-            require_once(TCPDFBILL_TT_PRODUCTS_LIBRARYPATH . 'tcpdf.php');
+            $fullFilename = TCPDFBILL_TT_PRODUCTS_LIBRARYPATH . 'tcpdf.php';
+            if (!file_exists($fullFilename)) {
+                return false;
+            }
+
+            require_once($fullFilename);
             $pdf =
                 GeneralUtility::makeInstance(
                     'TCPDF',

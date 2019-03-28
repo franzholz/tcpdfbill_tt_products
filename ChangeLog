@@ -1,3 +1,7 @@
+2019-03-28 Franz Holzinger <franz@ttproducts.de>
+
+    * new feature: check if the TCPDF file exists and return with false in error case
+
 2018-08-21 Franz Holzinger <franz@ttproducts.de>
 
     * bugfix: PHP syntax error
