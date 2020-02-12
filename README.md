@@ -51,7 +51,7 @@ libraryPath = typo3conf/ext/t3_tcpdf/Resources/Private/PHP/tcpdf
 For extension tcpdf you must use this path:
 
 ```
-libraryPath = typo3conf/ext/tcpdf/Resources/Private/Library/tcpdf/
+libraryPath = typo3conf/ext/tcpdf/Resources/Private/Library/tcpdf
 ```
 
 
