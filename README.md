@@ -42,8 +42,21 @@ Use the Extension Manager to set the relative library path to TCPDF, where the T
 libraryPath = tcpdf
 ```
 
+If you have installed the extension t3_tcpdf, then you must use this configuration:
+
+```
+libraryPath = typo3conf/ext/t3_tcpdf/Resources/Private/PHP/tcpdf
+```
+
+For extension tcpdf you must use this path:
+
+```
+libraryPath = typo3conf/ext/tcpdf/Resources/Private/Library/tcpdf/
+```
+
+
 Only the older library is supported, where the file /tcpdf/tcpdf.php must exist.
-For PHP 7 you must get a fork of it:
+For PHP 7 you must get a fork of it at:
 
 https://github.com/semaex/TCPDF
 

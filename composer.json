@@ -3,13 +3,16 @@
     "type": "typo3-cms-extension",
     "description": "Send a TCPDF generated bill for orders with tt_products",
     "homepage": "https://jambage.com",
-    "license": ["GPL-2.0+"],
+    "license": [
+        "GPL-2.0-or-later"
+    ],
     "keywords": ["TYPO3 CMS", "TCPDF", "tt_products"],
     "support": {
         "issues": "http://jambage.com/kontakt/forum.html"
     },
     "require": {
-        "typo3/cms-core": ">=6.1.0,<8.99.99"
+        "typo3/cms-core": ">=6.2.0,<=9.5.99",
+        "jambagecom/div2007": ">=1.10.27,<2"
 	},
 	"autoload": {
         "psr-4": {
@@ -17,7 +20,7 @@
         }
     },
     "replace": {
-        "tcpdfbill_tt_products": "self.version",
+        "jambagecom/tcpdfbill-tt-products": "self.version",
         "typo3-ter/tcpdfbill-tt-products": "self.version"
     },
     "extra": {

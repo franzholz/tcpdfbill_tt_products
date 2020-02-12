@@ -1,2 +1,3 @@
-  # cat=basic/enable; type=string; label=TCPDF path: Relative path to the TCPDF library. E.g. tcpdf if you have put it directly under your apache root folder, e.g. public_html. Or typo3conf/ext/t3_tcpdf/tcpdf if you use the extension t3_tcpdf.
-libraryPath = TCPDF-master
+  # cat=basic/enable; type=string; label=TCPDF path: Relative path to the TCPDF library. E.g. tcpdf if you have put it directly under your apache root folder, e.g. public_html in the subfolder TCPDF-master. Use typo3conf/ext/t3_tcpdf/tcpdf if you use the extension t3_tcpdf.
+libraryPath = typo3conf/ext/t3_tcpdf/Resources/Private/PHP/tcpdf
+

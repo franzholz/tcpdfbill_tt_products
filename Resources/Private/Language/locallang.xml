@@ -12,17 +12,17 @@
 			<label index="label_title">company name – person – street, city</label>
 			<label index="label_name">Name:</label>
 			<label index="label_add">Address:</label>
-			<label index="label_table_title">Rechnung</label>
-			<label index="label_order_date">Datum</label>
-			<label index="label_order_id">Bestell-Nr.</label>
-			<label index="label_order_bill">Rechnungs-Nr.</label>
-			<label index="label_order_qty">Anzahl</label>
-			<label index="label_order_name">Artikel</label>
-			<label index="label_order_amt">Preis</label>
-			<label index="label_order_index">(Brutto)</label>
-			<label index="label_order_gamt">Gesamt</label>
-			<label index="label_order_tax">enth. Mwst</label>
-			<label index="label_paymentaccount">Unsere Kontoverbindung</label>
+			<label index="label_table_title">Bill</label>
+			<label index="label_order_date">Date</label>
+			<label index="label_order_id">Order-No.</label>
+			<label index="label_order_bill">Bill-No.</label>
+			<label index="label_order_qty">Number</label>
+			<label index="label_order_name">Article</label>
+			<label index="label_order_amt">Price</label>
+			<label index="label_order_index">(gross)</label>
+			<label index="label_order_gamt">Total</label>
+			<label index="label_order_tax">included Vat</label>
+			<label index="label_paymentaccount">Our Account</label>
 			<label index="label_thanks">Many thanks for your order.</label>
 			<label index="label_sender">Your Shop-Team</label>
 			<label index="label_text1">Company</label>
@@ -33,7 +33,7 @@
 			<label index="label_text6">Mobil:  +49-(0)0111</label>
 			<label index="label_text7">E-Mail: my@email.com</label>
 			<label index="label_text8">Internet: www.mydomain.de</label>
-			<label index="label_bottom">Bitte beachten Sie auch unsere AGBs unter:</label>
+			<label index="label_bottom">Please notice our conditions at:</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 

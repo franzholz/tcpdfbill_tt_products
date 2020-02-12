@@ -28,10 +28,11 @@ namespace JambageCom\TcpdfbillTtProducts\Hooks;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class Bill {
+
+class Bill implements \TYPO3\CMS\Core\SingletonInterface {
 
     public $LOCAL_LANG = array();		// Local Language content
-    public $extensionKey = 'tcpdfbill_tt_products';
+    public $extensionKey = TCPDFBILL_TT_PRODUCTS_EXT;
 
     public function generateBill (
         $pObj,
@@ -57,7 +58,6 @@ class Bill {
         }
 
         if($orderUid) {
-
             $errorCode = array();
             $basket1 = GeneralUtility::makeInstance('tx_ttproducts_basket');
             $basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
@@ -69,37 +69,33 @@ class Bill {
             }
 
             $this->fullURL	= GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
-            $langObj = GeneralUtility::makeInstance('JambageCom\\TcpdfbillTtProducts\\Language\\Language');
-            $langObj->init1(
-                $pObj,
-                $cObj,
-                $conf,
-                'Classes/Hooks/Bill.php'
+            $languageObj = GeneralUtility::makeInstance(\JambageCom\TcpdfbillTtProducts\Api\Localization::class);
+            $languageObj->init(
+                $this->extensionKey,
+                $conf['_LOCAL_LANG.'],
+                DIV2007_LANGUAGE_SUBPATH
             );
 
-            $LLkey = $langObj->getLanguage();
-            $languageFile = 'EXT:tcpdfbill_tt_products/Resources/Private/locallang.xml';
-
-            if (version_compare(TYPO3_version, '7.4.0', '>')) {
-
-                $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
-                $this->LOCAL_LANG =
-                    $languageFactory->getParsedData(
-                        $languageFile,
-                        $LLkey,
-                        'utf-8'
-                    );
-            } else {
-                $this->LOCAL_LANG = GeneralUtility::readLLfile($languageFile, $LLkey);
+            $functionResult = $languageObj->loadLocalLang(
+                'EXT:' . $this->extensionKey . DIV2007_LANGUAGE_SUBPATH . 'locallang.xml',
+                false
+            );
+            
+            if (!$functionResult) {
+                return false;
             }
+
+            $this->LOCAL_LANG = $languageObj->getLocalLang();
+            $LLkey = $languageObj->getLanguage();
 
             if (
                 $templateCode == '' ||
                 !strpos($templateCode, '###' . $subpartMarker . '###') ||
                 isset($conf['templateFile'])
             ) {
-                $templateFile = $conf['templateFile'] ? $conf['templateFile'] : 'EXT:tcpdfbill_tt_products/Resources/Private/pdf_template.html';
-                $templateCode = $cObj->fileResource($templateFile);
+                $templateFile = $conf['templateFile'] ? $conf['templateFile'] : 'EXT:' . $this->extensionKey . '/Resources/Private/pdf_template.html';
+                $templateCode = 
+                    \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
             }
 
             $subpartArray = $linkpartArray = array();
@@ -116,9 +112,7 @@ class Bill {
             $configurations_link['returnLast'] = $url;
             $url  = $cObj->typolink(null, $configurations_link);
             $billMarkerArray['###AGB_LINK###'] = $this->fullURL . $url;
-
             $billMarkerArray['###SERVER###'] = $this->fullURL;
-
             $translationArray = $this->LOCAL_LANG['default'];
             if (isset($this->LOCAL_LANG[$LLkey])) {
                 $translationArray = $this->LOCAL_LANG[$LLkey];
@@ -129,7 +123,7 @@ class Bill {
             }
             $billHtml = 'ERROR: Wrong version of tt_products';
 
-            $eInfo = \tx_div2007_alpha5::getExtensionInfo_fh003(TT_PRODUCTS_EXT);
+            $eInfo = \JambageCom\Div2007\Utility\ExtensionUtility::getExtensionInfo(TT_PRODUCTS_EXT);
 
             if (is_array($eInfo)) {
                 $ttProductsVersion = $eInfo['version'];
@@ -273,15 +267,30 @@ class Bill {
             }
 
             if (empty($errorCode)) {
-                $billHtml =
-                    $cObj->substituteMarkerArrayCached(
-                        $billHtml,
-                        $billMarkerArray,
-                        $subpartArray
-                    );
+                if (
+                    version_compare(TYPO3_version, '8.7.0', '<')
+                ) {
+                    $billHtml =
+                        $cObj->substituteMarkerArrayCached(
+                            $billHtml,
+                            $billMarkerArray,
+                            $subpartArray
+                        );
+                } else {
+                    $templateService = 
+                        GeneralUtility::makeInstance(
+                            \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
+                        );
+                    $billHtml =
+                        $templateService->substituteMarkerArrayCached(
+                            $billHtml,
+                            $billMarkerArray,
+                            $subpartArray
+                        );
+                }
             } else {
                 $billHtml = '';
-                $message = \tx_div2007_error::getMessage($langObj, $errorCode);
+                $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
                 GeneralUtility::sysLog(
                     $message,
                     $this->extensionKey,
@@ -301,8 +310,10 @@ class Bill {
             }
 
             $pdfFile = $path . 'Order-' . $orderUid . '.pdf';
+
             $fullFilename = TCPDFBILL_TT_PRODUCTS_LIBRARYPATH . 'tcpdf.php';
             if (!file_exists($fullFilename)) {
+                debug($fullFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $fullFilename . ' does not exist! You must set the appropriate libraryPath in the Extension Manager.'); // keep this
                 return false;
             }
 
@@ -365,7 +376,6 @@ class Bill {
 
             $result = PATH_site . $pdfFile;
         }
-
         return $result;
     }
 }
