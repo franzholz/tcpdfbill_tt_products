@@ -85,6 +85,13 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 return false;
             }
 
+            $tcpdfFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] . 'tcpdf.php';
+
+            if (!file_exists($tcpdfFilename)) {
+                debug($tcpdfFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $tcpdfFilename . ' does not exist! You must set the appropriate libraryPath in the Extension Manager.'); // keep this
+                return false;
+            }
+
             $this->LOCAL_LANG = $languageObj->getLocalLang();
             $LLkey = $languageObj->getLanguage();
 
@@ -311,13 +318,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
 
             $pdfFile = $path . 'Order-' . $orderUid . '.pdf';
 
-            $fullFilename = TCPDFBILL_TT_PRODUCTS_LIBRARYPATH . 'tcpdf.php';
-            if (!file_exists($fullFilename)) {
-                debug($fullFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $fullFilename . ' does not exist! You must set the appropriate libraryPath in the Extension Manager.'); // keep this
-                return false;
-            }
-
-            require_once($fullFilename);
+            require_once($tcpdfFilename);
             $pdf =
                 GeneralUtility::makeInstance(
                     'TCPDF',

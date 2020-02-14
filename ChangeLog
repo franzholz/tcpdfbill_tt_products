@@ -1,3 +1,10 @@
+
+
+2020-02-14 Franz Holzinger <franz@ttproducts.de>
+
+    * bugfix for TYPO3 8.7: variable $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['tcpdfbill_tt_products'] must be used instead of $_EXTCONF
+    * bugfix: replace TCPDFBILL_TT_PRODUCTS_LIBRARYPATH by $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath']
+
 2020-02-12 Franz Holzinger <franz@ttproducts.de>
 
     * support for TYPO3 9.5

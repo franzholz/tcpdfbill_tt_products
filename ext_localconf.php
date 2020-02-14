@@ -16,17 +16,14 @@ call_user_func(function () {
         $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
         )->get(TCPDFBILL_TT_PRODUCTS_EXT);
-    } else if (isset($_EXTCONF)) {
-        $extensionConfiguration = unserialize($_EXTCONF);    // unserializing the configuration so we can use it here:
+    } {
+        $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][TCPDFBILL_TT_PRODUCTS_EXT]);
     }
 
-    if (!defined ('TCPDFBILL_TT_PRODUCTS_LIBRARYPATH')) {
-        define('TCPDFBILL_TT_PRODUCTS_LIBRARYPATH', PATH_site . $extensionConfiguration['libraryPath'] . '/');
-    }
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] = PATH_site . $extensionConfiguration['libraryPath'] . '/';
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_products']['billdelivery'][] =
     'JambageCom\\TcpdfbillTtProducts\\Hooks\\Bill';
-
 });
 
 
