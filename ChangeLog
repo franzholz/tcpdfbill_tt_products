@@ -1,4 +1,7 @@
+2021-08-09 Franz Holzinger <franz@ttproducts.de>
 
+    * support for TYPO3 10.4 and tt_products 3.2
+    * bugfix for tt_products >= 2.9.11
 
 2020-02-14 Franz Holzinger <franz@ttproducts.de>
 

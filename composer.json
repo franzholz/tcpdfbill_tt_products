@@ -8,12 +8,15 @@
     ],
     "keywords": ["TYPO3 CMS", "TCPDF", "tt_products"],
     "support": {
-        "issues": "http://jambage.com/kontakt/forum.html"
+        "issues": "https://jambage.com/kontakt/forum.html"
     },
     "require": {
-        "typo3/cms-core": ">=6.2.0,<=9.5.99",
-        "jambagecom/div2007": ">=1.10.27,<2"
+        "typo3/cms-core": "^9.5 || ^10.4",
+        "jambagecom/div2007": "^1.10"
 	},
+    "suggest": {
+        "tecnickcom/tcpdf": "^6.4"
+    },
 	"autoload": {
         "psr-4": {
             "JambageCom\\TcpdfbillTtProducts\\": "Classes/"
@@ -25,7 +28,7 @@
     },
     "extra": {
         "typo3/cms": {
-        "extension-key": "tcpdfbill_tt_products"
+            "extension-key": "tcpdfbill_tt_products"
         }
     }
 }

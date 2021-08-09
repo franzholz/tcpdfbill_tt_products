@@ -6,9 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="label_address_line1">Company,</label>
+            <label index="plugin">TCPDF Bill for tt_prdoucts</label>
+            <label index="label_address_line1">Company,</label>
 			<label index="label_address_line2">Street, City</label>
-
+            
 			<label index="label_title">company name – person – street, city</label>
 			<label index="label_name">Name:</label>
 			<label index="label_add">Address:</label>
@@ -21,6 +22,7 @@
 			<label index="label_order_amt">Price</label>
 			<label index="label_order_index">(gross)</label>
 			<label index="label_order_gamt">Total</label>
+			<label index="label_order_taxorder">Tax</label>
 			<label index="label_order_tax">included Vat</label>
 			<label index="label_paymentaccount">Our Account</label>
 			<label index="label_thanks">Many thanks for your order.</label>
@@ -33,6 +35,8 @@
 			<label index="label_text6">Mobil:  +49-(0)0111</label>
 			<label index="label_text7">E-Mail: my@email.com</label>
 			<label index="label_text8">Internet: www.mydomain.de</label>
+			<label index="label_note">Note</label>
+			<label index="label_payment_option">Payment Option</label>
 			<label index="label_bottom">Please notice our conditions at:</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -66,7 +70,7 @@
 			<label index="label_text7">E-Mail: my@email.com</label>
 			<label index="label_text8">Internet: www.mydomain.de</label>
 
-			<label index="label_bemerkung">Bemerkung</label>
+			<label index="label_note">Bemerkung</label>
 			<label index="label_payment_option">Bezahlung</label>
 			<label index="label_bottom">Bitte beachten Sie auch unsere AGBs unter</label>
 		</languageKey>

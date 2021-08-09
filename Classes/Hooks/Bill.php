@@ -31,7 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Bill implements \TYPO3\CMS\Core\SingletonInterface {
 
-    public $LOCAL_LANG = array();		// Local Language content
+    public $LOCAL_LANG = [];		// Local Language content
     public $extensionKey = TCPDFBILL_TT_PRODUCTS_EXT;
 
     public function generateBill (
@@ -50,6 +50,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
     ) {
         $orderUid = 0;
         $result = false;
+        $publicPath = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/';
 
         if (isset($orderArray['uid'])) {
             $orderUid = intval($orderArray['uid']);
@@ -58,21 +59,21 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
         }
 
         if($orderUid) {
-            $errorCode = array();
+            $errorCode = [];
             $basket1 = GeneralUtility::makeInstance('tx_ttproducts_basket');
             $basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
             $infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
             $subpartMarker = 'TCPDF_BILL_PDF_TEMPLATE';
-            $conf = array();
+            $localConf = [];
             if (isset($generationConf['conf.'])) {
-                $conf = $generationConf['conf.'];
+                $localConf = $generationConf['conf.'];
             }
 
             $this->fullURL	= GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
             $languageObj = GeneralUtility::makeInstance(\JambageCom\TcpdfbillTtProducts\Api\Localization::class);
             $languageObj->init(
                 $this->extensionKey,
-                $conf['_LOCAL_LANG.'],
+                $localConf['_LOCAL_LANG.'],
                 DIV2007_LANGUAGE_SUBPATH
             );
 
@@ -85,10 +86,17 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 return false;
             }
 
-            $tcpdfFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] . 'tcpdf.php';
+            if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'])) {
+                $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+                )->get(TCPDFBILL_TT_PRODUCTS_EXT);
+               $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] = $publicPath . $extensionConfiguration['libraryPath'] . '/';
+            }
 
-            if (!file_exists($tcpdfFilename)) {
-                debug($tcpdfFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $tcpdfFilename . ' does not exist! You must set the appropriate libraryPath in the Extension Manager.'); // keep this
+            $theFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] . 'tcpdf.php';
+
+            if (!file_exists($theFilename)) {
+                debug($theFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $theFilename . ' does not exist! You must set the appropriate libraryPath in the Settings Module -> Extension Configuration.'); // keep this
                 return false;
             }
 
@@ -98,14 +106,14 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             if (
                 $templateCode == '' ||
                 !strpos($templateCode, '###' . $subpartMarker . '###') ||
-                isset($conf['templateFile'])
+                isset($localConf['templateFile'])
             ) {
-                $templateFile = $conf['templateFile'] ? $conf['templateFile'] : 'EXT:' . $this->extensionKey . '/Resources/Private/pdf_template.html';
+                $templateFile = $localConf['templateFile'] ? $localConf['templateFile'] : 'EXT:' . $this->extensionKey . '/Resources/Private/pdf_template.html';
                 $templateCode = 
                     \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
             }
 
-            $subpartArray = $linkpartArray = array();
+            $subpartArray = $linkpartArray = [];
             $markerArray = $mainMarkerArray;
 
             $billMarkerArray['###ORDER_DATE###'] = date('d.m.Y', time());
@@ -134,6 +142,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
 
             if (is_array($eInfo)) {
                 $ttProductsVersion = $eInfo['version'];
+
                 if (
                     version_compare($ttProductsVersion, '2.7.0', '>=') &&
                     version_compare($ttProductsVersion, '2.8.0', '<')
@@ -168,7 +177,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                         );
                 } else if (
                     version_compare($ttProductsVersion, '2.9.1', '>=') &&
-                    version_compare($ttProductsVersion, '2.10.0', '<')
+                    version_compare($ttProductsVersion, '2.9.11', '<')
                 ) {
                     $billHtml =
                         $basketView->getView(
@@ -194,7 +203,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                     $basketView = GeneralUtility::getUserObj('&tx_ttproducts_basket_view');
                     $infoViewObj = GeneralUtility::getUserObj('&tx_ttproducts_info_view');
 
-                    $multiOrderArray = array();
+                    $multiOrderArray = [];
                     $multiOrderArray['0'] = $orderArray;
 
                     $billHtml =
@@ -211,16 +220,18 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                             '',
                             $itemArray,
                             $multiOrderArray,
-                            array(),
+                            [],
                             $basketExtra
                         );
                 } else if (
+                    version_compare($ttProductsVersion, '2.9.11', '>=') &&
+                    version_compare($ttProductsVersion, '2.10.0', '<') ||
+
                     version_compare($ttProductsVersion, '2.12.0', '>=') &&
                     version_compare($ttProductsVersion, '3.0.0', '<')
                 ) {
-                    $multiOrderArray = array();
+                    $multiOrderArray = [];
                     $multiOrderArray['0'] = $orderArray;
-
                     $billHtml =
                         $basketView->getView(
                             $errorCode,
@@ -237,15 +248,15 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                             $itemArray,
                             false,
                             $multiOrderArray,
-                            array(),
+                            [],
                             $basketExtra,
                             $basketRecs
                         );
                 } else if (
                     version_compare($ttProductsVersion, '3.0.0', '>=') &&
-                    version_compare($ttProductsVersion, '3.2.0', '<')
+                    version_compare($ttProductsVersion, '3.3.0', '<')
                 ) {
-                    $multiOrderArray = array();
+                    $multiOrderArray = [];
                     $multiOrderArray['0'] = $orderArray;
 
                     $billHtml =
@@ -260,13 +271,13 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                             true,
                             $subpartMarker,
                             $markerArray,
-                            array(),
-                            array(),
+                            [],
+                            [],
                             '',
                             $itemArray,
                             false,
                             $multiOrderArray,
-                            array(),
+                            [],
                             $basketExtra,
                             $basketRecs
                         );
@@ -274,27 +285,16 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             }
 
             if (empty($errorCode)) {
-                if (
-                    version_compare(TYPO3_version, '8.7.0', '<')
-                ) {
-                    $billHtml =
-                        $cObj->substituteMarkerArrayCached(
-                            $billHtml,
-                            $billMarkerArray,
-                            $subpartArray
-                        );
-                } else {
-                    $templateService = 
-                        GeneralUtility::makeInstance(
-                            \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
-                        );
-                    $billHtml =
-                        $templateService->substituteMarkerArrayCached(
-                            $billHtml,
-                            $billMarkerArray,
-                            $subpartArray
-                        );
-                }
+                $templateService = 
+                    GeneralUtility::makeInstance(
+                        \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
+                    );
+                $billHtml =
+                    $templateService->substituteMarkerArrayCached(
+                        $billHtml,
+                        $billMarkerArray,
+                        $subpartArray
+                    );
             } else {
                 $billHtml = '';
                 $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
@@ -312,13 +312,13 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $pdf_body = trim($billHtml);
             $path = 'typo3temp/';
 
-            if (isset($conf['path'])) {
-                $path = $conf['path'] . '/';
+            if (isset($localConf['path'])) {
+                $path = $localConf['path'] . '/';
             }
 
             $pdfFile = $path . 'Order-' . $orderUid . '.pdf';
 
-            require_once($tcpdfFilename);
+            require_once($theFilename);
             $pdf =
                 GeneralUtility::makeInstance(
                     'TCPDF',
@@ -333,7 +333,7 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $pdf->SetPrintHeader(false);
             $pdf->setPrintFooter(false);
 
-            $l = array();
+            $l = [];
 
             // PAGE META DESCRIPTORS --------------------------------------
 
@@ -345,10 +345,10 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $l['w_page'] = 'Seite';
 
             if (
-                isset($conf['_LOCAL_LANG.']) &&
-                isset($conf['_LOCAL_LANG.'][$LLkey . '.'])
+                isset($localConf['_LOCAL_LANG.']) &&
+                isset($localConf['_LOCAL_LANG.'][$LLkey . '.'])
             ) {
-                foreach ($conf['_LOCAL_LANG.'][$LLkey . '.'] as $key => $value) {
+                foreach ($localConf['_LOCAL_LANG.'][$LLkey . '.'] as $key => $value) {
                     $l[$key] = strip_tags($value);
                 }
             }
@@ -356,15 +356,15 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             //==============
             $pdf->setLanguageArray($l);
 
-            $font = array();
+
+            $font = [];
             $font['family'] = 'freesans';
             $font['style'] = '';
             $font['size'] = 12;
-
             if (
-                isset($conf['font.'])
+                isset($localConf['font.'])
             ) {
-                foreach ($conf['font.'] as $key => $value) {
+                foreach ($localConf['font.'] as $key => $value) {
                     $font[$key] = strip_tags($value);
                 }
             }
@@ -373,10 +373,10 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $pdf->AddPage();
             $pdf->writeHTML($pdf_body);
             ob_clean();
-            $pdf->Output(PATH_site . $pdfFile, false);
-
-            $result = PATH_site . $pdfFile;
+			$pdf->Output($publicPath . $pdfFile, false);
+            $result = $publicPath . $pdfFile;
         }
+
         return $result;
     }
 }
