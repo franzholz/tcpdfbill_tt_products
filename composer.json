@@ -12,18 +12,15 @@
     },
     "require": {
         "typo3/cms-core": "^9.5 || ^10.4",
-        "jambagecom/div2007": "^1.10"
-	},
-    "suggest": {
+        "jambagecom/div2007": "^1.10",
         "tecnickcom/tcpdf": "^6.4"
     },
-	"autoload": {
+    "autoload": {
         "psr-4": {
             "JambageCom\\TcpdfbillTtProducts\\": "Classes/"
         }
     },
     "replace": {
-        "jambagecom/tcpdfbill-tt-products": "self.version",
         "typo3-ter/tcpdfbill-tt-products": "self.version"
     },
     "extra": {
