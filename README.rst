@@ -3,8 +3,10 @@ TYPO3 extension tcpdfbill_tt_products
 
 The TYPO3 extension tcpdfbill_tt_products has the purpose to enable the
 generation of a bill in a PDF format. A HTML bill is converted into a
-PDF bill using the TCPDF library. The TCPDF library is not included in
-this extension. tt_products makes usage of this extension.
+PDF bill using the TCPDF library. The TCPDF library is not part of
+this extension. However tt_products requires it. Therefore you must
+either install the extension t3_tcpdf, or use composer to install "tecnickcom/tcpdf"
+or unzip a zip file version of TCPDF anywhere on the filesystem.
 
 Put this into the Setup:
 
