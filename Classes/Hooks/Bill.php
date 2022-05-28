@@ -144,58 +144,6 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 $ttProductsVersion = $eInfo['version'];
 
                 if (
-                    version_compare($ttProductsVersion, '2.7.0', '>=') &&
-                    version_compare($ttProductsVersion, '2.8.0', '<')
-                ) {
-                // this is not supported in tt_products 2.7.30
-                    $billHtml =
-                        $basketView->getView(
-                            $templateCode,
-                            'EMAIL',
-                            $infoViewObj,
-                            false,
-                            false,
-                            true,
-                            '###' . $subpartMarker . '###',
-                            $markerArray
-                        );
-                } else if (
-                    version_compare($ttProductsVersion, '2.8.0', '>=') &&
-                    version_compare($ttProductsVersion, '2.9.0', '<')
-                ) {
-                    $billHtml =
-                        $basketView->getView(
-                            $templateCode,
-                            'EMAIL',
-                            $infoViewObj,
-                            false,
-                            false,
-                            true,
-                            $subpartMarker,
-                            $markerArray,
-                            ''
-                        );
-                } else if (
-                    version_compare($ttProductsVersion, '2.9.1', '>=') &&
-                    version_compare($ttProductsVersion, '2.9.11', '<')
-                ) {
-                    $billHtml =
-                        $basketView->getView(
-                            $templateCode,
-                            'EMAIL',
-                            $infoViewObj,
-                            false,
-                            false,
-                            $calculatedArray,
-                            true,
-                            $subpartMarker,
-                            $markerArray,
-                            '',
-                            $itemArray,
-                            $orderArray,
-                            $basketExtra
-                        );
-                } else if (
                     version_compare($ttProductsVersion, '2.11.0', '>=') &&
                     version_compare($ttProductsVersion, '2.12.0', '<')
                 ) {
