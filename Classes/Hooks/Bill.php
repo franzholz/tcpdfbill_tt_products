@@ -25,14 +25,27 @@ namespace JambageCom\TcpdfbillTtProducts\Hooks;
 * @author Franz Holzinger <franz@ttproducts.de>
 */
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+class Bill implements SingletonInterface,  LoggerAwareInterface
+{
+    use LoggerAwareTrait;
 
-class Bill implements \TYPO3\CMS\Core\SingletonInterface {
+	const BODY = 1;
+	const HEADER = 2;
+	const FOOTER = 3;
 
     public $LOCAL_LANG = [];		// Local Language content
-    public $extensionKey = TCPDFBILL_TT_PRODUCTS_EXT;
+    public $extensionKey = 'tcpdfbill_tt_products';
+    private $typeArray = [
+        Bill::BODY   => 'body',
+        Bill::HEADER => 'header',
+        Bill::FOOTER => 'footer' 
+    ];
 
     public function generateBill (
         $pObj,
@@ -47,10 +60,25 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
         $type,
         array $generationConf,
         &$result
-    ) {
+    )
+    {
         $orderUid = 0;
         $result = false;
         $publicPath = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/';
+        $useHeaderTemplate = true;
+        $useFooterTemplate = true;
+        $templateArray = [
+            BILL::BODY => $templateCode,
+            BILL::HEADER => '',
+            BILL::FOOTER => ''
+        ];
+        $htmlParts = [
+            BILL::BODY => '',
+            BILL::HEADER => '',
+            BILL::FOOTER => ''
+        ];        
+        $multiOrderArray = [];
+        $multiOrderArray['0'] = $orderArray;
 
         if (isset($orderArray['uid'])) {
             $orderUid = intval($orderArray['uid']);
@@ -59,6 +87,10 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
         }
 
         if($orderUid) {
+            $templateService = 
+                GeneralUtility::makeInstance(
+                    \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
+                );
             $errorCode = [];
             $basket1 = GeneralUtility::makeInstance('tx_ttproducts_basket');
             $basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
@@ -73,12 +105,12 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $languageObj = GeneralUtility::makeInstance(\JambageCom\TcpdfbillTtProducts\Api\Localization::class);
             $languageObj->init(
                 $this->extensionKey,
-                $localConf['_LOCAL_LANG.'],
+                $localConf['_LOCAL_LANG.'] ?? '',
                 DIV2007_LANGUAGE_SUBPATH
             );
 
             $functionResult = $languageObj->loadLocalLang(
-                'EXT:' . $this->extensionKey . DIV2007_LANGUAGE_SUBPATH . 'locallang.xml',
+                'EXT:' . $this->extensionKey . DIV2007_LANGUAGE_SUBPATH . 'locallang.xlf',
                 false
             );
             
@@ -86,17 +118,19 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 return false;
             }
 
-            if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'])) {
+            if (
+                !isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'])
+            ) {
                 $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
-                )->get(TCPDFBILL_TT_PRODUCTS_EXT);
-               $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] = $publicPath . $extensionConfiguration['libraryPath'] . '/';
+                )->get($this->extensionKey);
+               $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'] = $publicPath . $extensionConfiguration['libraryPath'] . '/';
             }
 
-            $theFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TCPDFBILL_TT_PRODUCTS_EXT]['libraryPath'] . 'tcpdf.php';
+            $theFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'] . 'tcpdf.php';
 
             if (!file_exists($theFilename)) {
-                debug($theFilename, 'ERROR in extension ' . TCPDFBILL_TT_PRODUCTS_EXT . ': TCPDF file ' . $theFilename . ' does not exist! You must set the appropriate libraryPath in the Settings Module -> Extension Configuration.'); // keep this
+                debug($theFilename, 'ERROR in extension ' . $this->extensionKey . ': TCPDF file ' . $theFilename . ' does not exist! You must set the appropriate libraryPath in the Settings Module -> Extension Configuration.'); // keep this
                 return false;
             }
 
@@ -106,11 +140,34 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             if (
                 $templateCode == '' ||
                 !strpos($templateCode, '###' . $subpartMarker . '###') ||
-                isset($localConf['templateFile'])
+                (
+                    isset($localConf['templateFile']) &&
+                    !isset($localConf['templateFile.'][BILL::BODY])
+                )
             ) {
-                $templateFile = $localConf['templateFile'] ? $localConf['templateFile'] : 'EXT:' . $this->extensionKey . '/Resources/Private/pdf_template.html';
-                $templateCode = 
+                $bodyFile = '';
+                if (isset($localConf['templateFile'])) {
+                    $bodyFile = $localConf['templateFile'];
+                }
+                $templateFile = ($bodyFile ? $bodyFile : 'EXT:' . $this->extensionKey . '/Resources/Private/body_template.html');
+                $templateArray[BILL::BODY] = 
                     \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
+            }
+
+            if (isset($localConf['templateFile.'])) {
+                foreach($templateArray as $type => $html) {
+                    switch ($type) {
+                        case BILL::BODY:
+                        case BILL::HEADER:
+                        case BILL::FOOTER:
+                            $templateFile = (isset($localConf['templateFile.'][$this->typeArray[$type]]) ? $localConf['templateFile.'][$this->typeArray[$type]] : 'EXT:' . $this->extensionKey . '/Resources/Private/' . $this->typeArray[$type] . '_template.html');
+
+                            $templateArray[$type] = 
+                                \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
+                        default:
+                            break;
+                    }
+                }
             }
 
             $subpartArray = $linkpartArray = [];
@@ -123,8 +180,9 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 $billMarkerArray['###ORDER_BILL_NO###']  = $orderUid;
             }
 
+            $configurations_link = [];
             $configurations_link['parameter'] = $basket1->conf['PIDagb'];
-            $configurations_link['returnLast'] = $url;
+            $configurations_link['returnLast'] = 'url';
             $url  = $cObj->typolink(null, $configurations_link);
             $billMarkerArray['###AGB_LINK###'] = $this->fullURL . $url;
             $billMarkerArray['###SERVER###'] = $this->fullURL;
@@ -144,46 +202,16 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                 $ttProductsVersion = $eInfo['version'];
 
                 if (
-                    version_compare($ttProductsVersion, '2.11.0', '>=') &&
-                    version_compare($ttProductsVersion, '2.12.0', '<')
-                ) {
-                    $basket1 = GeneralUtility::getUserObj('&tx_ttproducts_basket');
-                    $basketView = GeneralUtility::getUserObj('&tx_ttproducts_basket_view');
-                    $infoViewObj = GeneralUtility::getUserObj('&tx_ttproducts_info_view');
-
-                    $multiOrderArray = [];
-                    $multiOrderArray['0'] = $orderArray;
-
-                    $billHtml =
-                        $basketView->getView(
-                            $templateCode,
-                            'EMAIL',
-                            $infoViewObj,
-                            false,
-                            false,
-                            $calculatedArray,
-                            true,
-                            $subpartMarker,
-                            $markerArray,
-                            '',
-                            $itemArray,
-                            $multiOrderArray,
-                            [],
-                            $basketExtra
-                        );
-                } else if (
                     version_compare($ttProductsVersion, '2.9.11', '>=') &&
                     version_compare($ttProductsVersion, '2.10.0', '<') ||
 
                     version_compare($ttProductsVersion, '2.12.0', '>=') &&
                     version_compare($ttProductsVersion, '3.0.0', '<')
                 ) {
-                    $multiOrderArray = [];
-                    $multiOrderArray['0'] = $orderArray;
                     $billHtml =
                         $basketView->getView(
                             $errorCode,
-                            $templateCode,
+                            $templateArray[BILL::BODY],
                             'EMAIL',
                             $infoViewObj,
                             false,
@@ -202,15 +230,38 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                         );
                 } else if (
                     version_compare($ttProductsVersion, '3.0.0', '>=') &&
-                    version_compare($ttProductsVersion, '3.3.0', '<')
+                    version_compare($ttProductsVersion, '3.2.7', '<')
                 ) {
-                    $multiOrderArray = [];
-                    $multiOrderArray['0'] = $orderArray;
-
                     $billHtml =
                         $basketView->getView(
                             $errorCode,
-                            $templateCode,
+                            $templateArray[BILL::BODY],
+                            'EMAIL',
+                            $infoViewObj,
+                            false,
+                            false,
+                            $calculatedArray,
+                            true,
+                            $subpartMarker,
+                            $markerArray,
+                            [],
+                            [],
+                            '',
+                            $itemArray,
+                            false,
+                            $multiOrderArray,
+                            [],
+                            $basketExtra,
+                            $basketRecs
+                        );
+                } else if (
+                    version_compare($ttProductsVersion, '3.2.7', '>=') &&
+                    version_compare($ttProductsVersion, '3.5.0', '<')
+                ) {
+                    $billHtml =
+                        $basketView->getView(
+                            $errorCode,
+                            $templateArray[BILL::BODY],
                             'EMAIL',
                             $infoViewObj,
                             false,
@@ -233,10 +284,6 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             }
 
             if (empty($errorCode)) {
-                $templateService = 
-                    GeneralUtility::makeInstance(
-                        \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
-                    );
                 $billHtml =
                     $templateService->substituteMarkerArrayCached(
                         $billHtml,
@@ -246,10 +293,9 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             } else {
                 $billHtml = '';
                 $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
-                GeneralUtility::sysLog(
+                $this->logger->error(
                     $message,
-                    $this->extensionKey,
-                    GeneralUtility::SYSLOG_SEVERITY_ERROR
+                    [$this->extensionKey]
                 );
             }
 
@@ -267,9 +313,17 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             $pdfFile = $path . 'Order-' . $orderUid . '.pdf';
 
             require_once($theFilename);
+            $theClass = 'TCPDF';
+            if (
+                !empty($templateArray[BILL::HEADER]) ||
+                !empty($templateArray[BILL::FOOTER])
+            ) {
+                $theClass = TcpdfBill::class;
+            }
+
             $pdf =
                 GeneralUtility::makeInstance(
-                    'TCPDF',
+                    $theClass,
                     PDF_PAGE_ORIENTATION,
                     PDF_UNIT,
                     PDF_PAGE_FORMAT,
@@ -277,9 +331,6 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
                     'UTF-8',
                     false
                 );
-
-            $pdf->SetPrintHeader(false);
-            $pdf->setPrintFooter(false);
 
             $l = [];
 
@@ -318,10 +369,91 @@ class Bill implements \TYPO3\CMS\Core\SingletonInterface {
             }
 
             $pdf->SetFont($font['family'], $font['style'], $font['size'], '', 'false');
+            // set margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+    
+            if ($theClass == TcpdfBill::class) {
+                $types = [BILL::HEADER, BILL::FOOTER];
+                foreach ($types as $type) {
+                    if (empty($templateArray[$type])) {
+                        continue;
+                    }
+
+                    $html =
+                        $basketView->getView(
+                            $errorCode,
+                            $templateArray[$type],
+                            'EMAIL',
+                            $infoViewObj,
+                            false,
+                            false,
+                            $calculatedArray,
+                            true,
+                            $subpartMarker,
+                            $markerArray,
+                            [],
+                            [],
+                            '',
+                            $itemArray,
+                            false,
+                            $multiOrderArray,
+                            [],
+                            $basketExtra,
+                            $basketRecs
+                        );
+
+                    if (empty($errorCode)) {
+                        $html =
+                            $templateService->substituteMarkerArrayCached(
+                                $html,
+                                $billMarkerArray,
+                                $subpartArray
+                            );
+                    } else {
+                        $html = '';
+                        $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
+                        $this->logger->error(
+                            $message,
+                            [$this->extensionKey]
+                        );
+                    }
+                    if (!empty($html)) {
+                        switch ($type) {
+                            case BILL::HEADER:
+                                    $pdf->setHeaderHtml($html);
+                                break;
+                            case BILL::FOOTER:
+                                    $pdf->setFooterHtml($html);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            // set default font subsetting mode
+            $pdf->setFontSubsetting(true);
+
+            // Set font
+            // dejavusans is a UTF-8 Unicode font, if you only need to
+            // print standard ASCII chars, you can use core fonts like
+            // helvetica or times to reduce file size.
+            $pdf->SetFont('dejavusans', '', 14, '', true);
+
+            // Add a page
+            // This method has several options, check the source code documentation for more information.
             $pdf->AddPage();
+
             $pdf->writeHTML($pdf_body);
             ob_clean();
-			$pdf->Output($publicPath . $pdfFile, false);
+            $pdf->Output($publicPath . $pdfFile, false);
             $result = $publicPath . $pdfFile;
         }
 

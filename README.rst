@@ -42,7 +42,11 @@ Use the 'outputFolder' setup to change it.
 
    plugin.tt_products {
      bill.conf {
-        templateFile = fileadmin/pdf_template.html
+        templateFile {
+             body = fileadmin/body_template.html
+             header = fileadmin/header_template.html
+             footer = fileadmin/footer_template.html
+        }
         font {
            style = normal
         }
