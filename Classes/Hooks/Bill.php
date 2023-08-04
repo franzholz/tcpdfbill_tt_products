@@ -28,8 +28,18 @@ namespace JambageCom\TcpdfbillTtProducts\Hooks;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+use JambageCom\Div2007\Utility\ErrorUtility;
+use JambageCom\Div2007\Utility\ExtensionUtility;
+use JambageCom\Div2007\Utility\FrontendUtility;
+
+use JambageCom\TcpdfbillTtProducts\Api\Localization;
+
 
 class Bill implements SingletonInterface,  LoggerAwareInterface
 {
@@ -64,7 +74,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
     {
         $orderUid = 0;
         $result = false;
-        $publicPath = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/';
+        $publicPath = Environment::getPublicPath() . '/';
         $useHeaderTemplate = true;
         $useFooterTemplate = true;
         $templateArray = [
@@ -89,28 +99,29 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
         if($orderUid) {
             $templateService = 
                 GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class
+                    MarkerBasedTemplateService::class
                 );
             $errorCode = [];
             $basket1 = GeneralUtility::makeInstance('tx_ttproducts_basket');
             $basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
             $infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
             $subpartMarker = 'TCPDF_BILL_PDF_TEMPLATE';
+            $languageSubpath = '/Resources/Private/Language/';
             $localConf = [];
             if (isset($generationConf['conf.'])) {
                 $localConf = $generationConf['conf.'];
             }
 
             $this->fullURL	= GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
-            $languageObj = GeneralUtility::makeInstance(\JambageCom\TcpdfbillTtProducts\Api\Localization::class);
+            $languageObj = GeneralUtility::makeInstance(Localization::class);
             $languageObj->init(
                 $this->extensionKey,
                 $localConf['_LOCAL_LANG.'] ?? '',
-                DIV2007_LANGUAGE_SUBPATH
+                $languageSubpath
             );
 
             $functionResult = $languageObj->loadLocalLang(
-                'EXT:' . $this->extensionKey . DIV2007_LANGUAGE_SUBPATH . 'locallang.xlf',
+                'EXT:' . $this->extensionKey . $languageSubpath . 'locallang.xlf',
                 false
             );
             
@@ -121,8 +132,8 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             if (
                 !isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'])
             ) {
-                $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+                $extensionConfiguration = GeneralUtility::makeInstance(
+                    ExtensionConfiguration::class
                 )->get($this->extensionKey);
                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'] = $publicPath . $extensionConfiguration['libraryPath'] . '/';
             }
@@ -150,8 +161,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                     $bodyFile = $localConf['templateFile'];
                 }
                 $templateFile = ($bodyFile ? $bodyFile : 'EXT:' . $this->extensionKey . '/Resources/Private/body_template.html');
-                $templateArray[BILL::BODY] = 
-                    \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
+                $templateArray[BILL::BODY] =  FrontendUtility::fileResource($templateFile);
             }
 
             if (isset($localConf['templateFile.'])) {
@@ -162,8 +172,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                         case BILL::FOOTER:
                             $templateFile = (isset($localConf['templateFile.'][$this->typeArray[$type]]) ? $localConf['templateFile.'][$this->typeArray[$type]] : 'EXT:' . $this->extensionKey . '/Resources/Private/' . $this->typeArray[$type] . '_template.html');
 
-                            $templateArray[$type] = 
-                                \JambageCom\Div2007\Utility\FrontendUtility::fileResource($templateFile);
+                            $templateArray[$type] =  FrontendUtility::fileResource($templateFile);
                         default:
                             break;
                     }
@@ -195,8 +204,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                 $billMarkerArray['###' . strtoupper($key) . '###'] = $translationPart[0]['target'];
             }
             $billHtml = 'ERROR: Wrong version of tt_products';
-
-            $eInfo = \JambageCom\Div2007\Utility\ExtensionUtility::getExtensionInfo(TT_PRODUCTS_EXT);
+            $eInfo = ExtensionUtility::getExtensionInfo('tt_products');
 
             if (is_array($eInfo)) {
                 $ttProductsVersion = $eInfo['version'];
@@ -292,7 +300,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                     );
             } else {
                 $billHtml = '';
-                $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
+                $message = ErrorUtility::getMessage($languageObj, $errorCode);
                 $this->logger->error(
                     $message,
                     [$this->extensionKey]
@@ -419,7 +427,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             );
                     } else {
                         $html = '';
-                        $message = \JambageCom\Div2007\Utility\ErrorUtility::getMessage($languageObj, $errorCode);
+                        $message = ErrorUtility::getMessage($languageObj, $errorCode);
                         $this->logger->error(
                             $message,
                             [$this->extensionKey]
