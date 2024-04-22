@@ -54,7 +54,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
     private $typeArray = [
         Bill::BODY   => 'body',
         Bill::HEADER => 'header',
-        Bill::FOOTER => 'footer' 
+        Bill::FOOTER => 'footer'
     ];
 
     public function generateBill (
@@ -86,7 +86,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             BILL::BODY => '',
             BILL::HEADER => '',
             BILL::FOOTER => ''
-        ];        
+        ];
         $multiOrderArray = [];
         $multiOrderArray['0'] = $orderArray;
 
@@ -97,7 +97,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
         }
 
         if($orderUid) {
-            $templateService = 
+            $templateService =
                 GeneralUtility::makeInstance(
                     MarkerBasedTemplateService::class
                 );
@@ -124,7 +124,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                 'EXT:' . $this->extensionKey . $languageSubpath . 'locallang.xlf',
                 false
             );
-            
+
             if (!$functionResult) {
                 return false;
             }
@@ -149,8 +149,10 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             $LLkey = $languageObj->getLanguage();
 
             if (
-                $templateCode == '' ||
-                !strpos($templateCode, '###' . $subpartMarker . '###') ||
+                (
+                    $templateCode == '' ||
+                    !strpos($templateCode, '###' . $subpartMarker . '###')
+                ) &&
                 (
                     isset($localConf['templateFile']) &&
                     !isset($localConf['templateFile.'][BILL::BODY])
@@ -165,13 +167,13 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             }
 
             if (isset($localConf['templateFile.'])) {
+
                 foreach($templateArray as $type => $html) {
                     switch ($type) {
                         case BILL::BODY:
                         case BILL::HEADER:
                         case BILL::FOOTER:
                             $templateFile = (isset($localConf['templateFile.'][$this->typeArray[$type]]) ? $localConf['templateFile.'][$this->typeArray[$type]] : 'EXT:' . $this->extensionKey . '/Resources/Private/' . $this->typeArray[$type] . '_template.html');
-
                             $templateArray[$type] =  FrontendUtility::fileResource($templateFile);
                         default:
                             break;
@@ -387,7 +389,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
 
             // set image scale factor
             $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-    
+
             if ($theClass == TcpdfBill::class) {
                 $types = [BILL::HEADER, BILL::FOOTER];
                 foreach ($types as $type) {
