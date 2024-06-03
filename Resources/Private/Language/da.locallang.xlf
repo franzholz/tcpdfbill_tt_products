@@ -3,57 +3,57 @@
   <file source-language="en" datatype="plaintext" original="EXT:tcpdfbill_tt_products/Resources/Private/Language/locallang.xlf" date="2022-05-28T18:39:56Z" product-name="tcpdfbill_tt_products" target-language="da">
     <header/>
     <body>
-      <trans-unit id="plugin" resname="plugin">
+      <trans-unit id="plugin" resname="plugin" approved="yes">
         <source>TCPDF Bill for tt_prdoucts</source>
-        <target state="needs-translation">TCPDF Bill for tt_prdoucts</target>
+        <target state="final">TCPDF regning for tt_products</target>
       </trans-unit>
-      <trans-unit id="label_address_line1" resname="label_address_line1">
+      <trans-unit id="label_address_line1" resname="label_address_line1" approved="yes">
         <source>Company,</source>
-        <target state="needs-translation">Company,</target>
+        <target state="final">Virksomhed,</target>
       </trans-unit>
-      <trans-unit id="label_address_line2" resname="label_address_line2">
+      <trans-unit id="label_address_line2" resname="label_address_line2" approved="yes">
         <source>Street, City</source>
-        <target state="needs-translation">Street, City</target>
+        <target state="final">Gade, By</target>
       </trans-unit>
-      <trans-unit id="label_title" resname="label_title">
+      <trans-unit id="label_title" resname="label_title" approved="yes">
         <source>company name – person – street, city</source>
-        <target state="needs-translation">company name – person – street, city</target>
+        <target state="final">firmanavn – person – gade, by</target>
       </trans-unit>
-      <trans-unit id="label_name" resname="label_name">
+      <trans-unit id="label_name" resname="label_name" approved="yes">
         <source>Name:</source>
-        <target state="needs-translation">Name:</target>
+        <target state="final">Navn:</target>
       </trans-unit>
-      <trans-unit id="label_add" resname="label_add">
+      <trans-unit id="label_add" resname="label_add" approved="yes">
         <source>Address:</source>
-        <target state="needs-translation">Address:</target>
+        <target state="final">Adresse:</target>
       </trans-unit>
-      <trans-unit id="label_table_title" resname="label_table_title">
+      <trans-unit id="label_table_title" resname="label_table_title" approved="yes">
         <source>Bill</source>
-        <target state="needs-translation">Bill</target>
+        <target state="final">Regning</target>
       </trans-unit>
-      <trans-unit id="label_order_date" resname="label_order_date">
+      <trans-unit id="label_order_date" resname="label_order_date" approved="yes">
         <source>Date</source>
-        <target state="needs-translation">Date</target>
+        <target state="final">Dato</target>
       </trans-unit>
-      <trans-unit id="label_order_id" resname="label_order_id">
+      <trans-unit id="label_order_id" resname="label_order_id" approved="yes">
         <source>Order-No.</source>
-        <target state="needs-translation">Order-No.</target>
+        <target state="final">Order-Nr.</target>
       </trans-unit>
-      <trans-unit id="label_order_bill" resname="label_order_bill">
+      <trans-unit id="label_order_bill" resname="label_order_bill" approved="yes">
         <source>Bill-No.</source>
-        <target state="needs-translation">Bill-No.</target>
+        <target state="final">Regningsnr.</target>
       </trans-unit>
-      <trans-unit id="label_order_qty" resname="label_order_qty">
+      <trans-unit id="label_order_qty" resname="label_order_qty" approved="yes">
         <source>Number</source>
-        <target state="needs-translation">Number</target>
+        <target state="final">Nummer</target>
       </trans-unit>
-      <trans-unit id="label_order_name" resname="label_order_name">
+      <trans-unit id="label_order_name" resname="label_order_name" approved="yes">
         <source>Article</source>
-        <target state="needs-translation">Article</target>
+        <target state="final">Artikel</target>
       </trans-unit>
-      <trans-unit id="label_order_amt" resname="label_order_amt">
+      <trans-unit id="label_order_amt" resname="label_order_amt" approved="yes">
         <source>Price</source>
-        <target state="needs-translation">Price</target>
+        <target state="final">Pris</target>
       </trans-unit>
       <trans-unit id="label_order_index" resname="label_order_index">
         <source>(gross)</source>
