@@ -212,10 +212,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                 $ttProductsVersion = $eInfo['version'];
 
                 if (
-                    version_compare($ttProductsVersion, '2.9.11', '>=') &&
-                    version_compare($ttProductsVersion, '2.10.0', '<') ||
-
-                    version_compare($ttProductsVersion, '2.12.0', '>=') &&
+                    version_compare($ttProductsVersion, '2.14.0', '>=') &&
                     version_compare($ttProductsVersion, '3.0.0', '<')
                 ) {
                     $billHtml =
@@ -266,7 +263,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                         );
                 } else if (
                     version_compare($ttProductsVersion, '3.2.7', '>=') &&
-                    version_compare($ttProductsVersion, '3.5.0', '<')
+                    version_compare($ttProductsVersion, '3.6.0', '<')
                 ) {
                     $billHtml =
                         $basketView->getView(
@@ -290,6 +287,8 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             $basketExtra,
                             $basketRecs
                         );
+                } else {
+                    throw new \RuntimeException('Error in tcpdfbill_tt_products: The tt_products version ' . $ttProductsVersion . ' is not supported!', 1717754287);
                 }
             }
 
