@@ -194,7 +194,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             $configurations_link = [];
             $configurations_link['parameter'] = $basket1->conf['PIDagb'];
             $configurations_link['returnLast'] = 'url';
-            $url  = $cObj->typolink(null, $configurations_link);
+            $url  = $cObj->typolink('', $configurations_link);
             $billMarkerArray['###AGB_LINK###'] = $this->fullURL . $url;
             $billMarkerArray['###SERVER###'] = $this->fullURL;
             $translationArray = $this->LOCAL_LANG['default'];
@@ -205,11 +205,12 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             foreach ($translationArray as $key => $translationPart) {
                 $billMarkerArray['###' . strtoupper($key) . '###'] = $translationPart[0]['target'];
             }
-            $billHtml = 'ERROR: Wrong version of tt_products';
             $eInfo = ExtensionUtility::getExtensionInfo('tt_products');
+            $billHtml = 'Error in tcpdfbill_tt_products: tt_products is invalid!';
 
             if (is_array($eInfo)) {
                 $ttProductsVersion = $eInfo['version'];
+                $billHtml = 'Error in tcpdfbill_tt_products: The tt_products version ' . $ttProductsVersion . ' is not supported!';
 
                 if (
                     version_compare($ttProductsVersion, '2.14.0', '>=') &&
@@ -287,8 +288,6 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             $basketExtra,
                             $basketRecs
                         );
-                } else {
-                    throw new \RuntimeException('Error in tcpdfbill_tt_products: The tt_products version ' . $ttProductsVersion . ' is not supported!', 1717754287);
                 }
             }
 
