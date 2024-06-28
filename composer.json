@@ -13,7 +13,9 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "typo3/cms-core": "^10.4 || ^11.5 || ^12.4",
-        "jambagecom/div2007": "^1.12",
+        "jambagecom/div2007": "^1.12"
+    },
+    "suggest": {
         "tecnickcom/tcpdf": "^6.4"
     },
     "autoload": {

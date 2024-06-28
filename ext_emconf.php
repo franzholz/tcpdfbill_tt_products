@@ -6,7 +6,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'TCPDF bill for tt_products',
-    'description' => 'tt_products Extension with automatic PDF bill generation using the TCPDF library. Works with tt_products 2.14.3-3.4.99',
+    'description' => 'tt_products Extension with automatic PDF bill generation using the TCPDF library. Works with tt_products 2.14.3-3.5.99',
     'category' => 'fe',
     'author' => 'Franz Holzinger',
     'author_email' => 'franz@ttproducts.de',
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = [
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
     'author_company' => '',
-    'version' => '0.3.1',
+    'version' => '0.4.0',
     'constraints' => [
         'depends' => [
             'php' => '7.4.0-8.99.99',

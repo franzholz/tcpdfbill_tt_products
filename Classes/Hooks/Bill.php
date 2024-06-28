@@ -57,7 +57,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
         Bill::FOOTER => 'footer'
     ];
 
-    public function generateBill (
+    public function generateBill(
         $pObj,
         $cObj,
         $templateCode,
@@ -112,7 +112,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                 $localConf = $generationConf['conf.'];
             }
 
-            $this->fullURL	= GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+            $fullURL	= GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
             $languageObj = GeneralUtility::makeInstance(Localization::class);
             $languageObj->init(
                 $this->extensionKey,
@@ -122,6 +122,11 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
 
             $functionResult = $languageObj->loadLocalLang(
                 'EXT:' . $this->extensionKey . $languageSubpath . 'locallang.xlf',
+                false
+            );
+
+            $functionResult |= $languageObj->loadLocalLang(
+                'EXT:' . 'tt_products' . $languageSubpath . 'Pi1/' . 'locallang.xlf',
                 false
             );
 
@@ -141,7 +146,13 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             $theFilename = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['libraryPath'] . 'tcpdf.php';
 
             if (!file_exists($theFilename)) {
-                debug($theFilename, 'ERROR in extension ' . $this->extensionKey . ': TCPDF file ' . $theFilename . ' does not exist! You must set the appropriate libraryPath in the Settings Module -> Extension Configuration.'); // keep this
+                $message = 'ERROR in extension ' . $this->extensionKey . ': TCPDF file ' . $theFilename . ' does not exist! You must set the appropriate libraryPath in the Settings Module -> Extension Configuration.';
+                debug ($message, '$message'); // keep this
+                $this->logger->error(
+                    $message,
+                    [$this->extensionKey]
+                );
+
                 return false;
             }
 
@@ -194,9 +205,9 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             $configurations_link = [];
             $configurations_link['parameter'] = $basket1->conf['PIDagb'];
             $configurations_link['returnLast'] = 'url';
-            $url  = $cObj->typolink(null, $configurations_link);
-            $billMarkerArray['###AGB_LINK###'] = $this->fullURL . $url;
-            $billMarkerArray['###SERVER###'] = $this->fullURL;
+            $url  = $cObj->typolink('', $configurations_link);
+            $billMarkerArray['###AGB_LINK###'] = $fullURL . $url;
+            $billMarkerArray['###SERVER###'] = $fullURL;
             $translationArray = $this->LOCAL_LANG['default'];
             if (isset($this->LOCAL_LANG[$LLkey])) {
                 $translationArray = $this->LOCAL_LANG[$LLkey];
@@ -205,18 +216,16 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             foreach ($translationArray as $key => $translationPart) {
                 $billMarkerArray['###' . strtoupper($key) . '###'] = $translationPart[0]['target'];
             }
-            $billHtml = 'ERROR: Wrong version of tt_products';
             $eInfo = ExtensionUtility::getExtensionInfo('tt_products');
+            $billHtml = 'Error in tcpdfbill_tt_products: tt_products is invalid!';
 
             if (is_array($eInfo)) {
                 $ttProductsVersion = $eInfo['version'];
+                $billHtml = 'Error in tcpdfbill_tt_products: The tt_products version ' . $ttProductsVersion . ' is not supported!';
 
                 if (
-                    version_compare($ttProductsVersion, '2.9.11', '>=') &&
-                    version_compare($ttProductsVersion, '2.10.0', '<') ||
-
-                    version_compare($ttProductsVersion, '2.12.0', '>=') &&
-                    version_compare($ttProductsVersion, '3.0.0', '<')
+                    version_compare($ttProductsVersion, '2.14.0', '>=') &&
+                    version_compare($ttProductsVersion, '2.15.8', '<')
                 ) {
                     $billHtml =
                         $basketView->getView(
@@ -265,8 +274,10 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             $basketRecs
                         );
                 } else if (
+                    version_compare($ttProductsVersion, '2.15.8', '>=') &&
+                    version_compare($ttProductsVersion, '3.0.0', '<') ||
                     version_compare($ttProductsVersion, '3.2.7', '>=') &&
-                    version_compare($ttProductsVersion, '3.5.0', '<')
+                    version_compare($ttProductsVersion, '3.6.0', '<')
                 ) {
                     $billHtml =
                         $basketView->getView(
@@ -307,6 +318,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                     $message,
                     [$this->extensionKey]
                 );
+                debug ($message, 'ERROR Message'); // keep this
             }
 
             if ($billHtml == '') {
@@ -466,7 +478,6 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
             $pdf->Output($publicPath . $pdfFile, false);
             $result = $publicPath . $pdfFile;
         }
-
         return $result;
     }
 }

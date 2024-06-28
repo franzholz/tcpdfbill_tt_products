@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="de" datatype="plaintext" original="EXT:tcpdfbill_tt_products/Resources/Private/Language/locallang.xlf" date="2022-05-28T18:39:56Z">
+		<header/>
+		<body>
+			<trans-unit id="plugin" resname="plugin">
+				<source>TCPDF Bill for tt_prdoucts</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_address_line1" resname="label_address_line1">
+				<source>Company,</source>
+				<target>Firma,</target>
+			</trans-unit>
+			<trans-unit id="label_address_line2" resname="label_address_line2">
+				<source>Street, City</source>
+				<target>Straße, Stadt</target>
+			</trans-unit>
+			<trans-unit id="label_title" resname="label_title">
+				<source>company name – person – street, city</source>
+				<target>company name – person – street, city</target>
+			</trans-unit>
+			<trans-unit id="label_name" resname="label_name">
+				<source>Name:</source>
+				<target>Name:</target>
+			</trans-unit>
+			<trans-unit id="label_add" resname="label_add">
+				<source>Address:</source>
+				<target>Address:</target>
+			</trans-unit>
+			<trans-unit id="label_table_title" resname="label_table_title">
+				<source>Bill</source>
+				<target>Rechnung</target>
+			</trans-unit>
+			<trans-unit id="label_order_date" resname="label_order_date">
+				<source>Date</source>
+				<target>Datum</target>
+			</trans-unit>
+			<trans-unit id="label_order_id" resname="label_order_id">
+				<source>Order-No.</source>
+				<target>Bestell-Nr.</target>
+			</trans-unit>
+			<trans-unit id="label_order_bill" resname="label_order_bill">
+				<source>Bill-No.</source>
+				<target>Rechnungs-Nr.</target>
+			</trans-unit>
+			<trans-unit id="label_order_qty" resname="label_order_qty">
+				<source>Number</source>
+				<target>Menge</target>
+			</trans-unit>
+			<trans-unit id="label_order_name" resname="label_order_name">
+				<source>Article</source>
+				<target>Artikel</target>
+			</trans-unit>
+			<trans-unit id="label_order_amt" resname="label_order_amt">
+				<source>Price</source>
+				<target>Preis</target>
+			</trans-unit>
+			<trans-unit id="label_order_index" resname="label_order_index">
+				<source>(gross)</source>
+				<target>(Brutto)</target>
+			</trans-unit>
+			<trans-unit id="label_order_gamt" resname="label_order_gamt">
+				<source>Total</source>
+				<target>Gesamt</target>
+			</trans-unit>
+			<trans-unit id="label_order_taxorder" resname="label_order_taxorder">
+				<source>Tax</source>
+				<target>MwSt</target>
+			</trans-unit>
+			<trans-unit id="label_order_tax" resname="label_order_tax">
+				<source>included Vat</source>
+				<target>+ MwSt</target>
+			</trans-unit>
+			<trans-unit id="label_paymentaccount" resname="label_paymentaccount">
+				<source>Our Account</source>
+				<target>Unsere Kontoverbindung</target>
+			</trans-unit>
+			<trans-unit id="label_thanks" resname="label_thanks">
+				<source>Many thanks for your order.</source>
+				<target>Vielen Dank für Ihre Bestellung</target>
+			</trans-unit>
+			<trans-unit id="label_sender" resname="label_sender">
+				<source>Your Shop-Team</source>
+				<target>Ihr Shop Team</target>
+			</trans-unit>
+			<trans-unit id="label_text1" resname="label_text1">
+				<source>Company</source>
+				<target>Company</target>
+			</trans-unit>
+			<trans-unit id="label_text2" resname="label_text2">
+				<source>Name Street Town</source>
+				<target>Name Straße Stadt</target>
+			</trans-unit>
+			<trans-unit id="label_text3" resname="label_text3">
+				<source>USt.-ID:DE00000</source>
+				<target>USt.-ID:DE00000</target>
+			</trans-unit>
+			<trans-unit id="label_text4" resname="label_text4">
+				<source>Telefon:  +49-(0)12345</source>
+				<target>Telefon:  +49-(0)12345</target>
+			</trans-unit>
+			<trans-unit id="label_text5" resname="label_text5">
+				<source>Telefax:  +49-(0)123456</source>
+				<target>Telefax:  +49-(0)123456</target>
+			</trans-unit>
+			<trans-unit id="label_text6" resname="label_text6">
+				<source>Mobil:  +49-(0)0111</source>
+				<target>Mobil:  +49-(0)0111</target>
+			</trans-unit>
+			<trans-unit id="label_text7" resname="label_text7">
+				<source>E-Mail: my@email.com</source>
+				<target>E-Mail: my@email.com</target>
+			</trans-unit>
+			<trans-unit id="label_text8" resname="label_text8">
+				<source>Internet: www.mydomain.de</source>
+				<target>Internet: www.mydomain.de</target>
+			</trans-unit>
+			<trans-unit id="label_note" resname="label_note">
+				<source>Note</source>
+				<target>Bemerkung</target>
+			</trans-unit>
+			<trans-unit id="label_payment_option" resname="label_payment_option">
+				<source>Payment Option</source>
+				<target>Bezahlung</target>
+			</trans-unit>
+			<trans-unit id="label_bottom" resname="label_bottom">
+				<source>Please notice our conditions at:</source>
+				<target>Bitte beachten Sie auch unsere AGBs unter</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
