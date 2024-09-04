@@ -277,7 +277,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                     version_compare($ttProductsVersion, '2.15.8', '>=') &&
                     version_compare($ttProductsVersion, '3.0.0', '<') ||
                     version_compare($ttProductsVersion, '3.2.7', '>=') &&
-                    version_compare($ttProductsVersion, '3.6.0', '<')
+                    version_compare($ttProductsVersion, '3.5.0', '<')
                 ) {
                     $billHtml =
                         $basketView->getView(
@@ -285,6 +285,34 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             $templateArray[BILL::BODY],
                             'EMAIL',
                             $infoViewObj,
+                            false,
+                            false,
+                            $calculatedArray,
+                            true,
+                            $subpartMarker,
+                            $markerArray,
+                            [],
+                            [],
+                            '',
+                            $itemArray,
+                            false,
+                            $multiOrderArray,
+                            [],
+                            $basketExtra,
+                            $basketRecs
+                        );
+                } else if (
+                    version_compare($ttProductsVersion, '3.5.0', '>=') &&
+                    version_compare($ttProductsVersion, '3.6.0', '<')
+                ) {
+                    $feUserRecord = \JambageCom\TtProducts\Api\CustomerApi::getFeUserRecord();
+                    $billHtml =
+                        $basketView->getView(
+                            $errorCode,
+                            $templateArray[BILL::BODY],
+                            'EMAIL',
+                            $infoViewObj,
+                            $feUserRecord,
                             false,
                             false,
                             $calculatedArray,

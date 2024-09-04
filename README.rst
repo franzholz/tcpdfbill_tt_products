@@ -4,12 +4,14 @@ TYPO3 extension tcpdfbill_tt_products
 The TYPO3 extension tcpdfbill_tt_products has the purpose to enable the
 generation of a bill in a PDF format. A HTML bill is converted into a
 PDF bill using the TCPDF library. The TCPDF library is not part of
-this extension. However tt_products requires it. Therefore you must find your 
-prefered way of installing it:
+this extension. However tt_products requires it. Therefore you must find your
+prefered way of installing it.
 
-*  Install the extension t3_tcpdf or tcpdf.
-*  Use composer to install "tecnickcom/tcpdf".
-*  Copy an extracted folder of TCPDF anywhere on the filesystem below your Apache root.
+3 possibilities:
+
+#.  Install the extension t3_tcpdf or tcpdf.
+#.  Use composer to install "tecnickcom/tcpdf".
+#.  Copy an extracted folder of TCPDF anywhere on the filesystem below your Apache root.
 
 Put this into the Setup:
 
@@ -32,7 +34,7 @@ Generate bill:
 
 Use the setup "bill.conf" to overwrite the charset and the standard
 configuration attributes of TCPDF. Any other tt_products setup below "bill" is not available with this extension.
-This extension contains a HTML marker template file which you can move below the 
+This extension contains a HTML marker template file which you can move below the
 fileadmin folder in order to adapt it to your needs. Then you can add your company name,
 account number and modify the design of the marker template file.
 The PDF file will be generated and stored in the folder 'fileadmin/data' by default.
@@ -58,8 +60,8 @@ Use the 'outputFolder' setup to change it.
 TCPDF Library:
 --------------
 
-Use the TYPO3 backend settings "Extension Configuration" 
-to set the relative library path to TCPDF 
+Use the TYPO3 backend settings "Extension Configuration"
+to set the relative library path to TCPDF
 where the TYPO3 home directory is the starting point.
 
 ::
