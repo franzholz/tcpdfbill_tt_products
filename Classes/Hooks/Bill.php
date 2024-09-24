@@ -275,7 +275,7 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                         );
                 } else if (
                     version_compare($ttProductsVersion, '2.15.8', '>=') &&
-                    version_compare($ttProductsVersion, '3.0.0', '<') ||
+                    version_compare($ttProductsVersion, '2.15.13', '<') ||
                     version_compare($ttProductsVersion, '3.2.7', '>=') &&
                     version_compare($ttProductsVersion, '3.5.0', '<')
                 ) {
@@ -302,6 +302,8 @@ class Bill implements SingletonInterface,  LoggerAwareInterface
                             $basketRecs
                         );
                 } else if (
+                    version_compare($ttProductsVersion, '2.15.14', '>=') &&
+                    version_compare($ttProductsVersion, '3.0.0', '<') ||
                     version_compare($ttProductsVersion, '3.5.0', '>=') &&
                     version_compare($ttProductsVersion, '3.6.0', '<')
                 ) {
