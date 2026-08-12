@@ -9,11 +9,11 @@
       </trans-unit>
       <trans-unit id="label_address_line1" resname="label_address_line1">
         <source>Company,</source>
-        <target state="needs-translation">Company,</target>
+        <target state="translated">Firma,</target>
       </trans-unit>
       <trans-unit id="label_address_line2" resname="label_address_line2">
         <source>Street, City</source>
-        <target state="needs-translation">Street, City</target>
+        <target state="translated">Straße, Stadt</target>
       </trans-unit>
       <trans-unit id="label_title" resname="label_title">
         <source>company name – person – street, city</source>
@@ -29,59 +29,59 @@
       </trans-unit>
       <trans-unit id="label_table_title" resname="label_table_title">
         <source>Bill</source>
-        <target state="needs-translation">Bill</target>
+        <target state="translated">Rechnung</target>
       </trans-unit>
       <trans-unit id="label_order_date" resname="label_order_date">
         <source>Date</source>
-        <target state="needs-translation">Date</target>
+        <target state="translated">Datum</target>
       </trans-unit>
       <trans-unit id="label_order_id" resname="label_order_id">
         <source>Order-No.</source>
-        <target state="needs-translation">Order-No.</target>
+        <target state="translated">Bestell-Nr.</target>
       </trans-unit>
       <trans-unit id="label_order_bill" resname="label_order_bill">
         <source>Bill-No.</source>
-        <target state="needs-translation">Bill-No.</target>
+        <target state="translated">Rechnungs-Nr.</target>
       </trans-unit>
       <trans-unit id="label_order_qty" resname="label_order_qty">
         <source>Number</source>
-        <target state="needs-translation">Number</target>
+        <target state="translated">Menge</target>
       </trans-unit>
       <trans-unit id="label_order_name" resname="label_order_name">
         <source>Article</source>
-        <target state="needs-translation">Article</target>
+        <target state="translated">Artikel</target>
       </trans-unit>
       <trans-unit id="label_order_amt" resname="label_order_amt">
         <source>Price</source>
-        <target state="needs-translation">Price</target>
+        <target state="translated">Preis</target>
       </trans-unit>
       <trans-unit id="label_order_index" resname="label_order_index">
         <source>(gross)</source>
-        <target state="needs-translation">(gross)</target>
+        <target state="translated">(Brutto)</target>
       </trans-unit>
       <trans-unit id="label_order_gamt" resname="label_order_gamt">
         <source>Total</source>
-        <target state="needs-translation">Total</target>
+        <target state="translated">Gesamt</target>
       </trans-unit>
       <trans-unit id="label_order_taxorder" resname="label_order_taxorder">
         <source>Tax</source>
-        <target state="needs-translation">Tax</target>
+        <target state="translated">MwSt</target>
       </trans-unit>
       <trans-unit id="label_order_tax" resname="label_order_tax">
         <source>included Vat</source>
-        <target state="needs-translation">included Vat</target>
+        <target state="translated">+ MwSt</target>
       </trans-unit>
       <trans-unit id="label_paymentaccount" resname="label_paymentaccount">
         <source>Our Account</source>
-        <target state="needs-translation">Our Account</target>
+        <target state="translated">Unsere Kontoverbindung</target>
       </trans-unit>
       <trans-unit id="label_thanks" resname="label_thanks">
         <source>Many thanks for your order.</source>
-        <target state="needs-translation">Many thanks for your order.</target>
+        <target state="translated">Vielen Dank für Ihre Bestellung</target>
       </trans-unit>
       <trans-unit id="label_sender" resname="label_sender">
         <source>Your Shop-Team</source>
-        <target state="needs-translation">Your Shop-Team</target>
+        <target state="translated">Ihr Shop Team</target>
       </trans-unit>
       <trans-unit id="label_text1" resname="label_text1">
         <source>Company</source>
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="label_text2" resname="label_text2">
         <source>Name Street Town</source>
-        <target state="needs-translation">Name Street Town</target>
+        <target state="translated">Name Straße Stadt</target>
       </trans-unit>
       <trans-unit id="label_text3" resname="label_text3">
         <source>USt.-ID:DE00000</source>
@@ -117,15 +117,15 @@
       </trans-unit>
       <trans-unit id="label_note" resname="label_note">
         <source>Note</source>
-        <target state="needs-translation">Note</target>
+        <target state="translated">Bemerkung</target>
       </trans-unit>
       <trans-unit id="label_payment_option" resname="label_payment_option">
         <source>Payment Option</source>
-        <target state="needs-translation">Payment Option</target>
+        <target state="translated">Bezahlung</target>
       </trans-unit>
       <trans-unit id="label_bottom" resname="label_bottom">
         <source>Please notice our conditions at:</source>
-        <target state="needs-translation">Please notice our conditions at:</target>
+        <target state="translated">Bitte beachten Sie auch unsere AGBs unter</target>
       </trans-unit>
     </body>
   </file>
